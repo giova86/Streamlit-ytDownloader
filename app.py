@@ -1,6 +1,7 @@
 import streamlit as st
 from pytube import YouTube
 import os
+import base64
 
 def get_yt_obj(url):
 	try:
@@ -22,7 +23,6 @@ def download_file(stream):
 
     with open('prova.mp4', 'rb') as f:
         bytes = f.read()
-        st.write(bytes)
         b64 = base64.b64encode(bytes).decode()
         href = f'<a href="data:file/zip;base64,{b64}" download=\'prova\'>\
             Here is your link \
