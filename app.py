@@ -7,7 +7,7 @@ def get_yt_obj(url):
 		obj = YouTube(url)
 		return obj
 	except:
-        st.write('Insert a valid URL')
+        #st.write('Insert a valid URL')
 		return False
 
 st.write("""
