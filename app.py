@@ -25,10 +25,8 @@ def download_file(stream):
 
     os.remove(f'{stream.title}.mp3')
 
-st.write("""
-# YouTube Downloader
-The easiest way to download Audio or Video from YouTube video
-""")
+st.markdown("<h1 style='text-align: center; color: red;'>YouTube Downloader</h1>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align: center; color: white;'>The easiest way to download Audio or Video from YouTube video</h4>", unsafe_allow_html=True)
 
 yt_url = st.text_input('The URL link')
 yt = get_yt_obj(yt_url)
