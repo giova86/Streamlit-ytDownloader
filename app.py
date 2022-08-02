@@ -7,6 +7,7 @@ def get_yt_obj(url):
 		obj = YouTube(url)
 		return obj
 	except:
+        st.write('Insert a valid URL')
 		return False
 
 st.write("""
@@ -20,7 +21,6 @@ yt = get_yt_obj(yt_url)
 if yt :
     st.video(yt_url)
 
-    yt = YouTube(yt)
     audios = yt.streams.filter(only_audio=True, mime_type="audio/mp4")
 
     st.write(f'Title: {yt.title}')
@@ -50,6 +50,3 @@ if yt :
         base, ext = os.path.splitext(out_file)
         new_file = base + '.mp3'
         os.rename(out_file, new_file)
-
-else:
-    st.write('Insert a valid URL')
