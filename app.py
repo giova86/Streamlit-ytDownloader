@@ -22,7 +22,7 @@ def download_file(stream):
 
     with open('prova.mp4', 'rb') as f:
         bytes = f.read()
-        print(bytes)
+        st.write(bytes)
         b64 = base64.b64encode(bytes).decode()
         href = f'<a href="data:file/zip;base64,{b64}" download=\'prova\'>\
             Here is your link \
