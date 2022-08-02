@@ -33,7 +33,7 @@ yt_url = st.text_input('The URL link')
 yt = get_yt_obj(yt_url)
 
 if yt:
-    st.video(yt_url)
+    #st.video(yt_url)
 
     audios = yt.streams.filter(only_audio=True)
 
