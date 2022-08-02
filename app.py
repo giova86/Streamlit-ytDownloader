@@ -10,26 +10,26 @@ def get_yt_obj(url):
         #st.write('Insert a valid URL')
 		return False
 
-def download_file(stream, fmt):
+def download_file(stream):
     """  """
     # if fmt == 'audio':
     #     title = stream.title + ' audio.'+ stream_final.subtype
     # else:
     #     title = stream.title + '.'+ stream_final.subtype
 
-    stream.download(filename='prova')
+    stream.download(filename='prova.mp4')
 
-    if 'DESKTOP_SESSION' not in os.environ: #and os.environ('HOSTNAME')=='streamlit':
 
-        with open('prova', 'rb') as f:
-            bytes = f.read()
-            b64 = base64.b64encode(bytes).decode()
-            href = f'<a href="data:file/zip;base64,{b64}" download=\'prova\'>\
-                Here is your link \
-            </a>'
-            st.markdown(href, unsafe_allow_html=True)
+    with open('prova.mp4', 'rb') as f:
+        bytes = f.read()
+        print(bytes)
+        b64 = base64.b64encode(bytes).decode()
+        href = f'<a href="data:file/zip;base64,{b64}" download=\'prova\'>\
+            Here is your link \
+        </a>'
+        st.markdown(href, unsafe_allow_html=True)
 
-        os.remove(title)
+    os.remove('prova')
 
 st.write("""
 # YouTube Downloader
@@ -63,7 +63,7 @@ if yt:
     if st.button('Download'):
 
         audio = yt.streams.filter(only_audio=True, mime_type="audio/mp4")[int(index)]
-        download_file(audio, 'audio')
+        download_file(audio)
 
         # out_file = audio.download()
         #
