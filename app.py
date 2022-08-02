@@ -7,6 +7,7 @@ import pytube.exceptions
 def get_yt_obj(url):
 	try:
 		obj = YouTube(str(url))
+		st.write(obj)
 		return obj
 	except:
         #st.write('Insert a valid URL')
