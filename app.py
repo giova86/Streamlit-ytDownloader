@@ -18,18 +18,18 @@ def download_file(stream):
     # else:
     #     title = stream.title + '.'+ stream_final.subtype
 
-    stream.download(filename='prova.mp3')
+    stream.download(filename=f'{stream.title}.mp3')
 
 
     with open('prova.mp3', 'rb') as f:
         bytes = f.read()
         b64 = base64.b64encode(bytes).decode()
-        href = f'<a href="data:file/zip;base64,{b64}" download=\'prova.mp3\'>\
+        href = f'<a href="data:file/zip;base64,{b64}" download=\'{stream.title}.mp3\'>\
             Here is your link \
         </a>'
         st.markdown(href, unsafe_allow_html=True)
 
-    os.remove('prova.mp3')
+    os.remove(f'{stream.title}.mp3')
 
 st.write("""
 # YouTube Downloader
@@ -55,7 +55,7 @@ if yt:
 
     options = [f'{i.abr}' for i in audios]
     st.subheader('Settings')
-    index = st.selectbox("selectbox", range(len(options)), format_func=lambda x: options[x])
+    index = st.selectbox("Select audio quality", range(len(options)), format_func=lambda x: options[x])
 
     # st.write("option:", options[index])
     # st.write("index:", index)
