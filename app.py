@@ -18,18 +18,18 @@ def download_file(stream):
     # else:
     #     title = stream.title + '.'+ stream_final.subtype
 
-    stream.download(filename='prova.mp4')
+    stream.download(filename='prova.mp3')
 
 
-    with open('prova.mp4', 'rb') as f:
+    with open('prova.mp3', 'rb') as f:
         bytes = f.read()
         b64 = base64.b64encode(bytes).decode()
-        href = f'<a href="data:file/zip;base64,{b64}" download=\'prova\'>\
+        href = f'<a href="data:file/zip;base64,{b64}" download=\'prova,mp3\'>\
             Here is your link \
         </a>'
         st.markdown(href, unsafe_allow_html=True)
 
-    os.remove('prova')
+    os.remove('prova.mp3')
 
 st.write("""
 # YouTube Downloader
