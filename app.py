@@ -18,15 +18,13 @@ The easiest way to download Audio or Video from YouTube video
 yt_url = st.text_input('The URL link')
 yt = get_yt_obj(yt_url)
 
-if yt :
+if yt:
     st.video(yt_url)
 
     audios = yt.streams.filter(only_audio=True, mime_type="audio/mp4")
 
     st.write(f'Title: {yt.title}')
     st.write(f'Author: {yt.author}')
-    st.write(f'Length: {yt.length}s')
-    st.write(f'Rating: {yt.rating}')
 
     # options = range(len(audios))
     # kbps = st.radio(
