@@ -37,8 +37,8 @@ if yt:
 
     audios = yt.streams.filter(only_audio=True)
 
-    st.write(f'Title: {yt.title}')
-    st.write(f'Author: {yt.author}')
+    # st.write(f'Title: {yt.title}')
+    # st.write(f'Author: {yt.author}')
 
     # options = range(len(audios))
     # kbps = st.radio(
