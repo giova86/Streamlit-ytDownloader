@@ -13,7 +13,7 @@ def get_yt_obj(url):
 		return False
 
 def download_file(stream):
-    stream.download(filename=f'{stream.title}.mp3')
+    stream.download(filename=f"{stream.title}.mp3")
 
     with open(f'{stream.title}.mp3', 'rb') as f:
         bytes = f.read()
