@@ -2,6 +2,7 @@ import streamlit as st
 from pytube import YouTube
 import os
 import base64
+import pytube.exceptions
 
 def get_yt_obj(url):
 	try:
