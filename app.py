@@ -21,7 +21,7 @@ def download_file(stream):
     stream.download(filename=f'{stream.title}.mp3')
 
 
-    with open('prova.mp3', 'rb') as f:
+    with open(f'{stream.title}.mp3', 'rb') as f:
         bytes = f.read()
         b64 = base64.b64encode(bytes).decode()
         href = f'<a href="data:file/zip;base64,{b64}" download=\'{stream.title}.mp3\'>\
