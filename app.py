@@ -42,7 +42,7 @@ if yt:
     if st.button('Download'):
         audio = yt.streams.filter(only_audio=True, mime_type="audio/mp4")[int(index)]
 
-        out_file = audio.download()
+        out_file = audio.download(output_path='/dev/null')
 
         # save the file
         base, ext = os.path.splitext(out_file)
