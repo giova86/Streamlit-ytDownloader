@@ -37,8 +37,8 @@ if yt:
 
     audios = yt.streams.filter(only_audio=True)
 
-    # st.write(f'Title: {yt.title}')
-    # st.write(f'Author: {yt.author}')
+    st.write(f'Title: {yt.title}')
+    st.write(f'Author: {yt.author}')
 
     # options = range(len(audios))
     # kbps = st.radio(
@@ -46,22 +46,22 @@ if yt:
     #      (f' [ {j+1} ]  {i.abr}' for i,j in zip(audios, options))
     #      )
 
-    # options = [f'{i.abr}' for i in audios]
-    # st.subheader('Settings')
-    # index = st.selectbox("Select audio quality", range(len(options)), format_func=lambda x: options[x])
-	#
-    # # st.write("option:", options[index])
-    # # st.write("index:", index)
-    # st.subheader('Download')
-	#
-    # if st.button('Download'):
-	#
-    #     audio = yt.streams.filter(only_audio=True)[int(index)]
-    #     download_file(audio)
-	#
-    #     # out_file = audio.download()
-    #     #
-    #     # # save the file
-    #     # base, ext = os.path.splitext(out_file)
-    #     # new_file = base + '.mp3'
-    #     # os.rename(out_file, new_file)
+    options = [f'{i.abr}' for i in audios]
+    st.subheader('Settings')
+    index = st.selectbox("Select audio quality", range(len(options)), format_func=lambda x: options[x])
+
+    # st.write("option:", options[index])
+    # st.write("index:", index)
+    st.subheader('Download')
+
+    if st.button('Download'):
+
+        audio = yt.streams.filter(only_audio=True)[int(index)]
+        download_file(audio)
+
+        # out_file = audio.download()
+        #
+        # # save the file
+        # base, ext = os.path.splitext(out_file)
+        # new_file = base + '.mp3'
+        # os.rename(out_file, new_file)
