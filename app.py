@@ -7,7 +7,6 @@ import pytube.exceptions
 def get_yt_obj(url):
 	try:
 		obj = YouTube(str(url))
-		st.write(obj)
 		return obj
 	except:
         #st.write('Insert a valid URL')
@@ -37,7 +36,7 @@ yt = get_yt_obj(yt_url)
 if yt:
     st.video(yt_url)
 
-    audios = yt.streams.filter(only_audio=True)
+    audios = yt.streams.filter(only_audio=True, mime_type="audio/mp4")
 
     st.write(f'Title: {yt.title}')
     st.write(f'Author: {yt.author}')
@@ -58,7 +57,7 @@ if yt:
 
     if st.button('Download'):
 
-        audio = yt.streams.filter(only_audio=True)[int(index)]
+        audio = yt.streams.filter(only_audio=True, mime_type="audio/mp4")[int(index)]
         download_file(audio)
 
         # out_file = audio.download()
