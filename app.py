@@ -2,16 +2,23 @@ import streamlit as st
 from pytube import YouTube
 import os
 
+def get_yt_obj(url):
+	try:
+		obj = YouTube(url)
+		return obj
+	except:
+		return False
+
 st.write("""
 # YouTube Downloader
 The easiest way to download Audio or Video from YouTube video
 """)
 
-yt = st.text_input('The URL link')
+yt_url = st.text_input('The URL link')
+yt = get_yt_obj(yt_url)
 
-
-if yt != '':
-    st.video(yt)
+if yt :
+    st.video(yt_url)
 
     yt = YouTube(yt)
     audios = yt.streams.filter(only_audio=True, mime_type="audio/mp4")
@@ -45,4 +52,4 @@ if yt != '':
         os.rename(out_file, new_file)
 
 else:
-    st.write('empty')
+    st.write('Insert a valid URL')
