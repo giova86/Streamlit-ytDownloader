@@ -17,11 +17,11 @@ def download_file(stream, fmt):
     # else:
     #     title = stream.title + '.'+ stream_final.subtype
 
-    stream.download()
+    stream.download(filename='prova')
 
     if 'DESKTOP_SESSION' not in os.environ: #and os.environ('HOSTNAME')=='streamlit':
 
-        with open(title, 'rb') as f:
+        with open('prova', 'rb') as f:
             bytes = f.read()
             b64 = base64.b64encode(bytes).decode()
             href = f'<a href="data:file/zip;base64,{b64}" download=\'prova\'>\
