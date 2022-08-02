@@ -21,7 +21,7 @@ yt = get_yt_obj(yt_url)
 if yt:
     st.video(yt_url)
 
-    audios = yt.StreamQuery.filter(only_audio=True, mime_type="audio/mp4")
+    audios = yt.streams.filter(only_audio=True, mime_type="audio/mp4")
 
     st.write(f'Title: {yt.title}')
     st.write(f'Author: {yt.author}')
