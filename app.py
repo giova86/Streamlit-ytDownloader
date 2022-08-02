@@ -54,11 +54,12 @@ if yt:
     #      )
 
     options = [f'{i.abr}' for i in audios]
-    st.subheader('Download')
+    st.subheader('Settings')
     index = st.selectbox("selectbox", range(len(options)), format_func=lambda x: options[x])
 
     # st.write("option:", options[index])
     # st.write("index:", index)
+    st.subheader('Download')
 
     if st.button('Download'):
 
