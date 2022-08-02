@@ -12,14 +12,7 @@ def get_yt_obj(url):
 		return False
 
 def download_file(stream):
-    """  """
-    # if fmt == 'audio':
-    #     title = stream.title + ' audio.'+ stream_final.subtype
-    # else:
-    #     title = stream.title + '.'+ stream_final.subtype
-
     stream.download(filename=f'{stream.title}.mp3')
-
 
     with open(f'{stream.title}.mp3', 'rb') as f:
         bytes = f.read()
@@ -42,7 +35,7 @@ yt = get_yt_obj(yt_url)
 if yt:
     st.video(yt_url)
 
-    audios = yt.streams.filter(only_audio=True, mime_type="audio/mp4")
+    audios = yt.streams.filter(only_audio=True)
 
     st.write(f'Title: {yt.title}')
     st.write(f'Author: {yt.author}')
@@ -63,7 +56,7 @@ if yt:
 
     if st.button('Download'):
 
-        audio = yt.streams.filter(only_audio=True, mime_type="audio/mp4")[int(index)]
+        audio = yt.streams.filter(only_audio=True)[int(index)]
         download_file(audio)
 
         # out_file = audio.download()
