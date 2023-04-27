@@ -1,66 +1,39 @@
 import streamlit as st
-from pytube import YouTube
-import os
-import base64
-import pytube.exceptions
+import yt_dlp
 
-def get_yt_obj(url):
-	try:
-		obj = YouTube(str(url))
-		return obj
-	except:
-        #st.write('Insert a valid URL')
-		return False
+# Impostiamo alcune opzioni predefinite per yt_dlp
+ytdl_options = {
+    "format": "bestvideo[height<=2160]+bestaudio/best[height<=2160]",
+    "merge_output_format": "mkv",
+}
 
-def download_file(stream):
-    stream.download(filename=f"{stream.title}.mp3")
+# Impostiamo un'opzione per lo stile della pagina Streamlit
+st.set_page_config(page_title="Scarica video da YouTube con yt_dlp")
 
-    with open(f'{stream.title}.mp3', 'rb') as f:
-        bytes = f.read()
-        b64 = base64.b64encode(bytes).decode()
-        href = f'<a href="data:file/zip;base64,{b64}" download=\'{stream.title}.mp3\'>\
-            Here is your link \
-        </a>'
-        st.markdown(href, unsafe_allow_html=True)
+# Aggiungiamo una descrizione della funzione dell'app
+st.header("Scarica video da YouTube con yt_dlp")
+st.write(
+    "Quest'applicazione ti consente di scaricare un video da YouTube utilizzando la libreria yt_dlp."
+)
 
-    os.remove(f'{stream.title}.mp3')
+# Aggiungiamo un campo di input per l'URL del video YouTube
+url = st.text_input("Inserisci l'URL del video YouTube")
 
-st.markdown("<h1 style='text-align: center; color: red;'>YouTube Downloader</h1>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align: center; color: white;'>The easiest way to download Audio or Video from YouTube video</h4>", unsafe_allow_html=True)
+# Se è stato inserito un URL valido, procediamo con lo scaricamento
+if url:
 
-yt_url = st.text_input('The URL link')
-yt = get_yt_obj(yt_url)
+    st.video(url)
 
-if yt:
-    st.video(yt_url)
+    if st.button('Download Video'):
 
-    audios = yt.streams.filter(only_audio=True, mime_type="audio/mp4")
+        with st.spinner(text="Download in corso..."):
+            try:
+		        # Utilizziamo la libreria yt_dlp per scaricare il video
+                with yt_dlp.YoutubeDL(ytdl_options) as ydl:
+                    ydl.download([url])
 
-    st.write(f'Title: {yt.title}')
-    st.write(f'Author: {yt.author}')
-
-    # options = range(len(audios))
-    # kbps = st.radio(
-    #      "Options",
-    #      (f' [ {j+1} ]  {i.abr}' for i,j in zip(audios, options))
-    #      )
-
-    options = [f'{i.abr}' for i in audios]
-    st.subheader('Settings')
-    index = st.selectbox("Select audio quality", range(len(options)), format_func=lambda x: options[x])
-
-    # st.write("option:", options[index])
-    # st.write("index:", index)
-    st.subheader('Download')
-
-    if st.button('Download'):
-
-        audio = yt.streams.filter(only_audio=True, mime_type="audio/mp4")[int(index)]
-        download_file(audio)
-
-        # out_file = audio.download()
-        #
-        # # save the file
-        # base, ext = os.path.splitext(out_file)
-        # new_file = base + '.mp3'
-        # os.rename(out_file, new_file)
+		        # Mostraimo un messaggio di successo
+                st.success("Download completato!")
+            except Exception as e:
+		        # Mostraimo un messaggio di errore se si verifica un problema con lo scaricamento
+                st.error(f"Si è verificato un errore: {str(e)}")
