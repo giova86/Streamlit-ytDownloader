@@ -1,94 +1,58 @@
-import streamlit as st
-import yt_dlp
 import os
-from io import BytesIO
-from PIL import Image
+import streamlit as st
+from yt_dlp import YoutubeDL
+import logging
 
-def download_audio(video_url):
+# Configurazione del logging
+logging.basicConfig(filename='download_errors.log', level=logging.ERROR)
+
+def download_youtube_playlist_as_mp3(playlist_url, download_path='downloads'):
+    # Crea la cartella di download se non esiste
+    if not os.path.exists(download_path):
+        os.makedirs(download_path)
+
     ydl_opts = {
         'format': 'bestaudio/best',
-        "ignoreerrors": True,
-        'outtmpl': '%(title)s.%(ext)s',
+        'outtmpl': os.path.join(download_path, '%(title)s.%(ext)s'),
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
             'preferredquality': '192',
-        }]
+        }],
+        'noplaylist': False,  # Impostiamo a False per scaricare tutta la playlist
+        'ignoreerrors': True,  # Ignora gli errori dei singoli video
+        'logger': logging.getLogger(),  # Registra gli errori nel file di log
     }
 
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([video_url])
-        filename = str(ydl.extract_info(video_url)["title"]) + ".mp3"
-    return filename
+    with YoutubeDL(ydl_opts) as ydl:
+        info_dict = ydl.extract_info(playlist_url, download=True)
+        print(info_dict)
+        if 'entries' in info_dict:
+            for entry in info_dict['entries']:
+                if entry:
+                    try:
+                        st.write(f"Ho scaricato: {entry['title']}")
+                        ydl.process_ie_result(entry, download=True)
+                    except Exception as e:
+                        logging.error(f"Errore nel download/conversione di {entry['webpage_url']}: {e}")
+                        st.write(f"Errore nel download/conversione di {entry['webpage_url']}: {e}")
+        else:
+            st.write(f"Scaricando: {info_dict['title']}")
 
 
-base_path = os.path.dirname(os.path.realpath(__file__)).replace("p\\", "/") + '/'
+    st.success("Download completato. Controlla download_errors.log per eventuali errori.")
 
-# Impostiamo alcune opzioni predefinite per yt_dlp
-ytdl_options = {
-    "format": "bestvideo[height<=2160]+bestaudio/best[height<=2160]",
-    "merge_output_format": "mkv",
-    "ignoreerrors": True
-}
+# Interfaccia Streamlit
+st.title("Downloader di Canzoni/Playlist di YouTube in formato MP3")
+st.write("Inserisci l'URL della playlist di YouTube per scaricare le tracce audio in formato MP3.")
 
-# Impostiamo un'opzione per lo stile della pagina Streamlit
-st.set_page_config(page_title="Audio & Video Downloader")
+playlist_url = st.text_input("URL della Playlist di YouTube")
+download_path = st.text_input("Percorso di Download", value='downloads')
 
-
-image = Image.open('cover.jpg')
-
-st.image(image)
-
-
-# Aggiungiamo una descrizione della funzione dell'app
-# st.header("Scarica video da YouTube con yt_dlp")
-
-
-# Aggiungiamo un campo di input per l'URL del video YouTube
-url = st.text_input("Inserisci l'URL del video YouTube")
-
-# Se è stato inserito un URL valido, procediamo con lo scaricamento
-if url:
-
-
-    st.video(url)
-
-    tab1, tab2 = st.tabs(['Video', 'Audio'])
-
-    with tab1:
-
-        if st.button('Download Video', use_container_width=True):
-
-            with st.spinner('Wait for it...'):
-                try:
-                    # Utilizziamo la libreria yt_dlp per scaricare il video
-                    with yt_dlp.YoutubeDL(ytdl_options) as ydl:
-                        # st.write(ydl)
-                        filename = ydl.download([url])
-                        st.write(filename)
-                    # with open(filename, 'rb') as f:
-                    #     file_bytes = BytesIO(f.read())
-                    #     btn_down = st.download_button(label='Scarica Video', data=file_bytes, file_name=filename, mime='audio/mp3', use_container_width=True)
-                    #     if btn_down:
-                    #         os.remove(f"{base_path}{filename}")
-
-                       # Mostraimo un messaggio di successo
-                    st.success("Download completato!")
-                except Exception as e:
-                    # Mostraimo un messaggio di errore se si verifica un problema con lo scaricamento
-                    st.error(f"Si è verificato un errore: {str(e)}")
-
-
-    with tab2:
-        if st.button("Estrai Traccia Audio", use_container_width=True):
-
-            with st.spinner('Wait for it...'):
-                filename = download_audio(url)
-                st.success("Download completato!")
-            # with open(filename, 'rb') as f:
-            #     file_bytes = BytesIO(f.read())
-            #     btn_down = st.download_button(label='Scarica Traccia Audio', data=file_bytes, file_name=filename, mime='audio/mp3', use_container_width=True)
-            #     if btn_down:
-            #         os.remove(f"{base_path}{filename}")
-
-
+if st.button("Scarica Playlist"):
+    if playlist_url:
+        with st.spinner("Download in corso..."):
+            download_youtube_playlist_as_mp3(playlist_url, download_path)
+            st.info("Download completato.")
+    else:
+        st.error("Per favore, inserisci un URL valido della playlist di YouTube.")
